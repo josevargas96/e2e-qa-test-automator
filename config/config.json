@@ -6,6 +6,6 @@
     "allowed_domains": [],
     "exclude_paths": ["/admin", "/logout"],
     "ai_model": "facebook/bart-large-mnli",
-    "element_timeout": 30000,
-    "navigation_timeout": 30000
+    "element_timeout": 45000,
+    "navigation_timeout": 45000
 }
