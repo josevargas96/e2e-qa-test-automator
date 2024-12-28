@@ -1,6 +1,5 @@
-playwright>=1.40.0
-transformers>=4.36.0
-torch>=2.1.0
-python-dotenv>=1.0.0
-pytest>=7.4.0
-pytest-playwright>=0.4.0
+playwright
+numpy<2.0.0
+transformers
+python-dotenv
+torch

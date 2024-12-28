@@ -1,0 +1,50 @@
+{
+    "name": "YouTube Search Test",
+    "description": "Search for a video on YouTube and click the third result",
+    "base_url": "https://www.youtube.com",
+    "steps": [
+        {
+            "id": "navigate",
+            "action": "navigate",
+            "url": "https://www.youtube.com"
+        },
+        {
+            "id": "wait_for_search_box",
+            "action": "wait",
+            "selector": "[name='search_query']",
+            "description": "Wait for search input to be ready"
+        },
+        {
+            "id": "accept_cookies",
+            "action": "click",
+            "selector": "button[aria-label='Accept all']",
+            "optional": true,
+            "description": "Accept cookies if prompt appears"
+        },
+        {
+            "id": "search",
+            "action": "type",
+            "selector": "[name='search_query']",
+            "value": "${SEARCH_TERM}",
+            "description": "Enter search term in YouTube search bar"
+        },
+        {
+            "id": "click_search",
+            "action": "click",
+            "selector": "button[aria-label='Search']",
+            "description": "Click search button"
+        },
+        {
+            "id": "wait_results",
+            "action": "wait",
+            "selector": "ytd-video-renderer",
+            "description": "Wait for search results to load"
+        },
+        {
+            "id": "click_third_video",
+            "action": "click",
+            "selector": "ytd-video-renderer:nth-child(3) #video-title",
+            "description": "Click on the third video in results"
+        }
+    ]
+} 
