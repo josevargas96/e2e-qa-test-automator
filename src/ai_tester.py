@@ -15,9 +15,9 @@ class AIWebTester:
         self.logger = logging.getLogger(__name__)
         self.logger.info("Initializing AIWebTester")
         
-        # Initialize AI model
+        # Initialize AI model - using text classification for interaction decisions
         self.nlp = pipeline("text-classification", 
-                          model="facebook/bart-large-mnli")
+                          model="distilbert-base-uncased-finetuned-sst-2-english")
         
         # Setup Playwright
         self.playwright = sync_playwright().start()
@@ -43,12 +43,25 @@ class AIWebTester:
     def analyze_element(self, element_text: str, element_type: str) -> bool:
         """
         Use AI to determine if an element should be interacted with.
+        Returns True if the element is likely interactive.
         """
         try:
-            context = f"This is a {element_type} with text: {element_text}"
-            result = self.nlp(context, 
-                            candidate_labels=["interactive", "non-interactive"])
-            return result[0]["label"] == "interactive"
+            # Create a context string that describes the element
+            context = f"This {element_type} element says '{element_text}'"
+            
+            # Classify the element - returns positive for interactive elements
+            result = self.nlp(context)[0]
+            
+            # Map sentiment to interactivity (positive sentiment = interactive)
+            score = result['score'] if result['label'] == 'POSITIVE' else 1 - result['score']
+            
+            # Consider elements like buttons and inputs as more likely to be interactive
+            base_score = 0.5
+            if element_type in ['button', 'input', 'select', 'a']:
+                base_score = 0.7
+                
+            return score > base_score
+            
         except Exception as e:
             self.logger.error(f"Error analyzing element: {e}")
             return False
