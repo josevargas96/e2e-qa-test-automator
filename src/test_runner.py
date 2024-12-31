@@ -6,6 +6,8 @@ from .ai_tester import AIWebTester
 from .utils.config import load_config
 from .utils.reporting import TestReport
 
+logging.basicConfig(level=logging.DEBUG)  # More detailed logging
+
 class TestRunner:
     def __init__(self, config_path: str = "config/config.json"):
         self.config = load_config(config_path)
@@ -22,8 +24,14 @@ class TestRunner:
             self.logger.error(f"Error loading test case: {e}")
             raise
 
-    def run_test(self, test_case_path: str, variables: Dict[str, str] = None):
-        """Run a specific test case"""
+    def run_test(self, test_case_path: str, variables: Dict[str, str] = None, close_after: bool = False):
+        """
+        Run a specific test case
+        Args:
+            test_case_path: Path to the test case JSON file
+            variables: Dictionary of variables to use in the test
+            close_after: Whether to close the browser after this test
+        """
         try:
             test_case = self.load_test_case(test_case_path)
             self.logger.info(f"Running test case: {test_case['name']}")
@@ -44,8 +52,15 @@ class TestRunner:
                     str(e),
                     screenshot_path
                 )
+            raise
         finally:
             self.report.generate_report()
+            if close_after:
+                self.close()
+
+    def close(self):
+        """Explicitly close the browser"""
+        if hasattr(self, 'tester'):
             self.tester.close()
 
     def _execute_step(self, step: Dict, variables: Dict[str, str]):
@@ -64,56 +79,57 @@ class TestRunner:
                     step['value'] = self._replace_variables(step['value'], variables)
                 
                 if action == 'navigate':
+                    self.logger.debug(f"Navigating to: {step['url']}")
                     self.tester.page.goto(step['url'])
-                    # Wait for the main content to load
-                    self.tester.page.wait_for_selector('ytd-app', state='visible')
                     self.tester.page.wait_for_load_state('networkidle')
                     self.tester.page.wait_for_load_state('domcontentloaded')
-                    # Add a small delay to ensure JavaScript is fully loaded
-                    self.tester.page.wait_for_timeout(3000)
-                
+                    
                 elif action == 'click':
+                    self.logger.debug(f"Clicking element: {step['selector']}")
                     try:
-                        # For optional steps, use a shorter timeout
                         timeout = 5000 if is_optional else self.config.get('element_timeout', 30000)
                         element = self.tester.page.wait_for_selector(
                             step['selector'], 
                             state='visible',
                             timeout=timeout
                         )
-                        if element:  # Element might be None for optional steps
-                            # Make sure the element is interactable
-                            self.tester.page.wait_for_selector(step['selector'], state='visible')
+                        if element:
                             element.scroll_into_view_if_needed()
-                            # Add a small delay before clicking
                             self.tester.page.wait_for_timeout(500)
                             element.click()
-                            self.tester.page.wait_for_timeout(1000)
                     except Exception as e:
                         if not is_optional:
                             raise
                         self.logger.info(f"Skipping optional step {step['id']}: {e}")
                 
                 elif action == 'type':
+                    self.logger.debug(f"Typing into element: {step['selector']}")
+                    # Wait for element to be visible and ready
                     element = self.tester.page.wait_for_selector(
                         step['selector'], 
                         state='visible',
                         timeout=self.config.get('element_timeout', 30000)
                     )
-                    # Make sure the element is ready
-                    self.tester.page.wait_for_timeout(500)
-                    # Clear the field first
-                    element.fill("")
-                    # Type with delay to simulate human input
-                    element.type(step['value'], delay=100)
-                    self.tester.page.wait_for_timeout(500)
+                    
+                    if element:
+                        # Make sure element is in view
+                        element.scroll_into_view_if_needed()
+                        
+                        # Clear the field using keyboard shortcuts
+                        element.click()  # Focus the element
+                        self.tester.page.keyboard.press("Control+A")  # Select all text
+                        self.tester.page.keyboard.press("Backspace")  # Delete selected text
+                        
+                        # Type the value with a delay
+                        element.type(step['value'], delay=100)
+                        
+                        # Wait a bit after typing
+                        self.tester.page.wait_for_timeout(500)
                 
                 elif action == 'wait':
-                    self.tester.page.wait_for_selector(
-                        step['selector'], 
-                        state='visible',
-                        timeout=self.config.get('element_timeout', 30000)
-                    )
+                    wait_time = step.get('time', 1000)
+                    self.logger.debug(f"Waiting for {wait_time}ms")
+                    self.tester.page.wait_for_timeout(wait_time)
                 
                 # If we get here, the step was successful
                 self.report.add_result(
@@ -130,17 +146,6 @@ class TestRunner:
                 if retry_count >= max_retries:
                     if not step.get('optional', False):
                         self.logger.error(f"Step {step['id']} failed after {max_retries} attempts")
-                        if self.config.get("screenshot_on_error"):
-                            screenshot_path = self.report.save_screenshot(
-                                self.tester.page,
-                                f"error_step_{step['id']}"
-                            )
-                            self.report.add_result(
-                                f"Error in step: {step['id']}",
-                                "failure",
-                                str(e),
-                                screenshot_path
-                            )
                         raise
                     else:
                         self.logger.info(f"Skipping optional step {step['id']} after {max_retries} attempts")
@@ -159,3 +164,7 @@ class TestRunner:
             if placeholder in value:
                 value = value.replace(placeholder, var_value)
         return value 
+
+    def __del__(self):
+        """Ensure browser is closed when TestRunner is destroyed"""
+        self.close() 

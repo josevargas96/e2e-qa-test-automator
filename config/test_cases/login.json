@@ -1,0 +1,57 @@
+{
+    "name": "Login to Better Hearing",
+    "description": "Login to Better Hearing staging environment",
+    "base_url": "https://betterhearing--staging.sandbox.lightning.force.com",
+    "steps": [
+        {
+            "id": "navigate_to_login",
+            "action": "navigate",
+            "url": "https://betterhearing--staging.sandbox.lightning.force.com",
+            "description": "Navigate to login page"
+        },
+        {
+            "id": "wait_for_login_form",
+            "action": "wait",
+            "time": 3000,
+            "description": "Wait for login form to load"
+        },
+        {
+            "id": "enter_username",
+            "action": "type",
+            "selector": "input#username",
+            "value": "${USERNAME}",
+            "description": "Enter username"
+        },
+        {
+            "id": "wait_after_username",
+            "action": "wait",
+            "time": 1000,
+            "description": "Wait after entering username"
+        },
+        {
+            "id": "enter_password",
+            "action": "type",
+            "selector": "input#password",
+            "value": "${PASSWORD}",
+            "description": "Enter password"
+        },
+        {
+            "id": "wait_after_password",
+            "action": "wait",
+            "time": 1000,
+            "description": "Wait after entering password"
+        },
+        {
+            "id": "click_login",
+            "action": "click",
+            "selector": "input#Login",
+            "description": "Click login button"
+        },
+        {
+            "id": "wait_for_login",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for login to complete"
+        }
+    ]
+}

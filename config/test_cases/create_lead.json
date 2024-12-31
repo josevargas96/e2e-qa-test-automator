@@ -1,0 +1,142 @@
+{
+    "name": "Create New Lead USA",
+    "description": "Create a new USA lead through global actions",
+    "base_url": "https://betterhearing--staging.sandbox.lightning.force.com",
+    "steps": [
+        {
+            "id": "wait_for_page_load",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for page to fully load"
+        },
+        {
+            "id": "click_global_actions",
+            "action": "click",
+            "selector": "button[data-aura-class='forceHeaderButton'][title='Global Actions']",
+            "optional": true,
+            "description": "Click global actions button"
+        },
+        {
+            "id": "click_global_actions_alt",
+            "action": "click",
+            "selector": "lightning-icon[icon-name='utility:add']",
+            "optional": true,
+            "description": "Click global actions button (alternative)"
+        },
+        {
+            "id": "click_new_lead",
+            "action": "click",
+            "selector": "a[title='New Lead USA']"
+        },
+        {
+            "id": "click_salutation",
+            "action": "click",
+            "selector": "a[role='combobox']"
+        },
+        {
+            "id": "select_salutation",
+            "action": "click",
+            "selector": "a[role='option'][title='Mr.']"
+        },
+        {
+            "id": "enter_first_name",
+            "action": "type",
+            "selector": "input.firstName.compoundBorderBottom",
+            "value": "${FIRST_NAME}"
+        },
+        {
+            "id": "enter_last_name",
+            "action": "type",
+            "selector": "input.lastName.compoundBLRadius",
+            "value": "${LAST_NAME}"
+        },
+        {
+            "id": "enter_email",
+            "action": "type",
+            "selector": "input[inputmode='email']",
+            "value": "${EMAIL}"
+        },
+        {
+            "id": "enter_phone",
+            "action": "type",
+            "selector": "input[type='tel']",
+            "value": "${PHONE}"
+        },
+        {
+            "id": "wait_before_solution",
+            "action": "wait",
+            "time": 2000,
+            "description": "Wait before interacting with solution dropdown"
+        },
+        {
+            "id": "click_solution_dropdown",
+            "action": "click", 
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Solution__c'] a[role='combobox']",
+            "description": "Click solution dropdown"
+        },
+        {
+            "id": "wait_for_dropdown",
+            "action": "wait",
+            "time": 1000,
+            "description": "Wait for dropdown to open"
+        },
+        {
+            "id": "select_solution",
+            "action": "click",
+            "selector": "a[role='option'][title='Hear Today']",
+            "description": "Select solution option"
+        },
+        {
+            "id": "wait_after_solution",
+            "action": "wait",
+            "time": 2000,
+            "description": "Wait after selecting solution"
+        },
+        {
+            "id": "click_campaign_dropdown",
+            "action": "click", 
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Delivery_Model__c'] a[role='combobox']",
+            "description": "Click Delivery Model dropdown"
+        },
+        {
+            "id": "wait_for_campaign_dropdown",
+            "action": "wait",
+            "time": 1000,
+            "description": "Wait for campaign dropdown to open"
+        },
+        {
+            "id": "select_solution",
+            "action": "click",
+            "selector": "a[role='option'][title='Teleaudiology']",
+            "description": "Select Delivery Model option"
+        },
+        {
+            "id": "wait_after_campaign",
+            "action": "wait",
+            "time": 2000,
+            "description": "Wait after selecting campaign"
+        },
+        {
+            "id": "click_save",
+            "action": "click",
+            "selector": "div[class='bottomBarRight slds-col--bump-left'] span[class=' label bBody']",
+            "description": "Click save button"
+        },
+        {
+            "id": "wait_after_save",
+            "action": "wait",
+            "time": 10000,
+            "description": "Wait after saving"
+        },
+        {
+            "id": "navigate_to_leads",
+            "action": "navigate",
+            "url": "https://betterhearing--staging.sandbox.lightning.force.com/lightning/o/Lead/list"
+        },
+        {
+            "id": "click_first_lead",
+            "action": "click",
+            "selector": "a[data-refid='recordId']"
+        }
+    ]
+}
