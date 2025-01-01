@@ -28,8 +28,8 @@ def main():
         
         # Login first
         login_variables = {
-            "USERNAME": "josemuskai@hear.com",
-            "PASSWORD": "N*lkCInkpk0Ibtr!"
+            "USERNAME": "{{username}}",
+            "PASSWORD": "{{password}}"
         }
         
         logger.info("Starting login process...")
