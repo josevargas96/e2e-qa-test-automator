@@ -1,4 +1,13 @@
+import os
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent
+sys.path.append(str(project_root))
+
 from src.test_runner import TestRunner
+from src.utils.lead_data_generator import LeadDataGenerator
 import logging
 
 def main():
@@ -13,11 +22,14 @@ def main():
             "slowMo": 1000     # This will slow down operations
         }
         runner = TestRunner(config_path="config/config.json")
+
+        # Initialize data generator
+        data_gen = LeadDataGenerator()
         
         # Login first
         login_variables = {
-            "USERNAME": "{{username}}",
-            "PASSWORD": "{{password}}"
+            "USERNAME": "josemuskai@hear.com",
+            "PASSWORD": "N*lkCInkpk0Ibtr!"
         }
         
         logger.info("Starting login process...")
@@ -27,15 +39,10 @@ def main():
             close_after=False  # Don't close browser after login
         )
 
-        # Create lead
-        lead_variables = {
-            "FIRST_NAME": "{{name}}",
-            "LAST_NAME": "{{last_name}}",
-            "EMAIL": "{{email}}",
-            "PHONE": "{{phone}}"
-        }
+        # Generate and use random lead data
+        lead_variables = data_gen.generate_lead_data()
         
-        logger.info("Starting lead creation process...")
+        logger.info(f"Starting lead creation process with data: {lead_variables}")
         runner.run_test(
             "config/test_cases/create_lead.json",
             variables=lead_variables,

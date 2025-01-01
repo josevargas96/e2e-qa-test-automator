@@ -1,129 +1,120 @@
 # E2E QA Test Automator 🤖
 
-An intelligent end-to-end testing automation framework that combines the power of AI with modern web testing tools. This project uses Python, Playwright, and Transformers to create a smart testing system that can autonomously explore and test web applications.
-
-## Overview
-
-This framework is designed to:
-- Use AI to intelligently interact with web elements
-- Automatically explore web applications
-- Generate and execute test cases
-- Create detailed reports of testing sessions
+An intelligent end-to-end testing automation framework for web applications, combining AI-powered testing with data generation capabilities. Built with Python, Playwright, and modern testing tools.
 
 ## Tech Stack
 - **Python**: Core programming language
-- **Playwright**: Modern web testing and automation
-- **Transformers**: AI-powered decision making
-- **HTML/CSS**: Test report generation
+- **Playwright**: Web testing and automation
+- **Transformers**: AI-powered testing
+- **Faker**: Test data generation
+- **HTML/CSS**: Test reporting
 
 ## Prerequisites
-
-- Python 3.8 or higher
-- pip (Python package installer)
-- Virtual environment (recommended)
+- Python 3.8+
+- pip
+- Virtual environment
 
 ## Installation
 
-1. Clone the repository:
 ```bash
+# Clone repository
 git clone https://github.com/josevargas96/e2e-qa-test-automator.git
 cd e2e-qa-test-automator
-```
 
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Unix/macOS
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate  # Unix/macOS
 # or
-.\venv\Scripts\activate  # On Windows
-```
+.\venv\Scripts\activate  # Windows
 
-3. Install dependencies:
-```bash
+# Install dependencies
 pip install -r requirements.txt
+pip install -e .  # Install package in development mode
 ```
 
 ## Project Structure
 ```
 e2e-qa-test-automator/
-├── src/                # Core source code
-│   └── ...            # Source modules
-├── tests/             # Test cases and scenarios
-│   └── ...            # Test files
-├── examples/          # Example usage and scenarios
-│   └── ...            # Example files
-├── config/            # Configuration files
-│   └── ...            # Config files
-├── main.py            # Main entry point
-└── requirements.txt   # Python dependencies
+├── src/                  # Core source code
+│   ├── ai_tester.py     # AI testing logic
+│   ├── test_runner.py   # Test execution engine
+│   └── utils/           # Utility modules
+│       └── lead_data_generator.py  # Test data generation
+├── tests/               # Test cases
+├── examples/            # Usage examples
+│   └── run_create_lead.py  # Lead creation example
+├── config/              # Configuration
+│   ├── test_cases/     # JSON test definitions
+│   └── config.yaml     # Global config
+└── requirements.txt     # Dependencies
 ```
 
-## Configuration
+## Usage Examples
 
-1. Copy the example configuration file:
-```bash
-cp config/config.example.yaml config/config.yaml
+### Create New Lead
+```python
+from src.test_runner import TestRunner
+from src.utils.lead_data_generator import LeadDataGenerator
+
+# Initialize
+runner = TestRunner(config_path="config/config.json")
+data_gen = LeadDataGenerator()
+
+# Generate random lead data
+lead_data = data_gen.generate_lead_data()
+
+# Run test
+runner.run_test(
+    "config/test_cases/create_lead.json",
+    variables=lead_data
+)
 ```
 
-2. Edit `config/config.yaml` with your settings:
-- Browser settings (type, headless mode)
-- Base URLs for testing
-- AI model parameters
-- Report generation preferences
-
-## Usage
-
-1. Basic usage:
-```bash
-python main.py --url https://example.com
-```
-
-2. Run with specific configuration:
+### Run with Custom Config
 ```bash
 python main.py --config custom_config.yaml
 ```
 
-3. Generate detailed report:
+## Configuration
+
+1. Copy example config:
 ```bash
-python main.py --url https://example.com --report detailed
+cp config/config.example.yaml config/config.yaml
 ```
 
-Check the `examples/` directory for more usage scenarios and sample test cases.
+2. Configure in `config.yaml`:
+```yaml
+browser:
+  type: chromium
+  headless: false
+  slowMo: 1000
+
+baseUrl: https://example.com
+```
 
 ## Development
 
-1. Fork the repository
-2. Create a feature branch:
+1. Create feature branch:
 ```bash
-git checkout -b feature/your-feature-name
+git checkout -b feature/your-feature
 ```
 
-3. Install development dependencies:
-```bash
-pip install -r requirements-dev.txt  # If available
-```
+2. Follow standards:
+- PEP 8 style
+- Type hints
+- Docstrings
+- Unit tests
 
-4. Make your changes following our coding standards:
-- Use PEP 8 style guide
-- Add docstrings for functions and classes
-- Include type hints
-- Write unit tests for new features
-
-5. Run tests:
+3. Run tests:
 ```bash
 pytest tests/
 ```
 
-6. Submit a pull request
-
 ## Contributing
-
-We welcome contributions! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Follow our development guidelines
-4. Submit a pull request
+1. Fork repository
+2. Create feature branch
+3. Follow guidelines
+4. Submit PR
 
 ## License
-
-This project is open source and available under the MIT License.
+MIT License
