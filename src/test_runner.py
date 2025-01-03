@@ -85,6 +85,8 @@ class TestRunner:
                     self.tester.page.wait_for_load_state('domcontentloaded')
                     
                 elif action == 'click':
+                    if 'selector' in step:
+                        step['selector'] = self._replace_variables(step['selector'], variables)
                     self.logger.debug(f"Clicking element: {step['selector']}")
                     try:
                         timeout = 5000 if is_optional else self.config.get('element_timeout', 30000)

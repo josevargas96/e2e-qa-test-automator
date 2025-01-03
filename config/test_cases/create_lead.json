@@ -131,12 +131,25 @@
         {
             "id": "navigate_to_leads",
             "action": "navigate",
-            "url": "https://betterhearing--staging.sandbox.lightning.force.com/lightning/o/Lead/list"
+            "url": "https://betterhearing--staging.sandbox.lightning.force.com/lightning/o/Lead/list",
+            "optional": true
+        },
+        {
+            "id": "wait_for_leads_page_load",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for page to fully load"
         },
         {
             "id": "click_first_lead",
             "action": "click",
-            "selector": "a[data-refid='recordId']"
+            "selector": "a[data-refid='recordId'][title='${FIRST_NAME} ${LAST_NAME}']"
+        },
+        {
+            "id": "wait_for_lead_to_load",
+            "action": "wait",
+            "time": 1000,
+            "description": "Wait for lead page to fully load"
         }
     ]
 }
