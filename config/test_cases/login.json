@@ -50,7 +50,7 @@
         {
             "id": "wait_for_login",
             "action": "wait",
-            "time": 5000,
+            "time": 15000,
             "description": "Wait for login to complete"
         }
     ]
