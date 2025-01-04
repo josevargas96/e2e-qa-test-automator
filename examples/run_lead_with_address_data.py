@@ -43,11 +43,11 @@ def main():
         # Generate and use random lead data
         lead_variables = data_gen.generate_lead_data()
         
-        logger.info(f"Starting lead creation process with data: {lead_variables}")
+        logger.info(f"Starting extended lead creation process with data: {lead_variables}")
         runner.run_test(
-            "config/test_cases/create_lead.json",
+            "config/test_cases/create_lead_with_address_data.json",
             variables=lead_variables,
-            close_after=True  # Close browser after creating lead
+            close_after=True  # Close browser after completing all actions
         )
 
     except Exception as e:
