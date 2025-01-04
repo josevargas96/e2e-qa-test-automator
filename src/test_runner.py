@@ -2,6 +2,8 @@ import json
 import logging
 from typing import Dict, List, Optional
 from pathlib import Path
+from datetime import datetime
+import os
 from .ai_tester import AIWebTester
 from .utils.config import load_config
 from .utils.reporting import TestReport
@@ -62,6 +64,50 @@ class TestRunner:
         """Explicitly close the browser"""
         if hasattr(self, 'tester'):
             self.tester.close()
+
+    def save_url_to_file(self, url: str, filename: str, variables: Dict[str, str] = None):
+        """
+        Save URL to a text file in the configured output directory using absolute paths
+        Args:
+            url: The URL to save
+            filename: Name of the file to save the URL in
+        """
+        try:
+            # Get absolute output directory from config or raise error if not set
+            if "output_dir" not in self.config:
+                raise ValueError("output_dir must be set in config with absolute path")
+            
+            # Convert to Path object and resolve to absolute path
+            output_dir = Path(self.config["output_dir"]).resolve()
+            
+            # Create directory if it doesn't exist
+            output_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Add timestamp to filename (before the extension)
+            file_timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            base_name, ext = os.path.splitext(filename)
+            timestamped_filename = f"{base_name}_{file_timestamp}{ext}"
+            
+            filepath = output_dir / timestamped_filename
+            
+            # Get timestamp for the content
+            content_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            
+            # Create the log line with name if available
+            log_line = f"{content_timestamp}: "
+            if variables and 'FIRST_NAME' in variables and 'LAST_NAME' in variables:
+                log_line += f"{variables['FIRST_NAME']} {variables['LAST_NAME']} - "
+            log_line += f"{url}\n"
+            
+            # Write to file
+            with open(filepath, 'a') as f:
+                f.write(log_line)
+            
+            self.logger.info(f"URL saved to {filepath}")
+            
+        except Exception as e:
+            self.logger.error(f"Error saving URL to file: {e}")
+            raise
 
     def _execute_step(self, step: Dict, variables: Dict[str, str]):
         """Execute a single test step"""
@@ -132,6 +178,12 @@ class TestRunner:
                     wait_time = step.get('time', 1000)
                     self.logger.debug(f"Waiting for {wait_time}ms")
                     self.tester.page.wait_for_timeout(wait_time)
+                
+                elif action == 'get_url':
+                    current_url = self.tester.get_current_url()
+                    self.logger.debug(f"Captured URL: {current_url}")
+                    if 'save_to_file' in step:
+                        self.save_url_to_file(current_url, step['save_to_file'], variables)
                 
                 # If we get here, the step was successful
                 self.report.add_result(

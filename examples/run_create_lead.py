@@ -19,7 +19,8 @@ def main():
         # Initialize the test runner with headless=False
         config = {
             "headless": False,  # This will show the browser
-            "slowMo": 1000     # This will slow down operations
+            "slowMo": 1000,     # This will slow down operations
+            "output_dir": "/Users/josevargas/Documents/qa test-outputs"  # Add your absolute path here
         }
         runner = TestRunner(config_path="config/config.json")
 

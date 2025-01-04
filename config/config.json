@@ -1,6 +1,7 @@
 {
     "headless": false,
     "screenshot_on_error": true,
+    "output_dir": "/Users/josevargas/Documents/qa test-outputs",
     "wait_time": 2,
     "max_depth": 3,
     "allowed_domains": [],
