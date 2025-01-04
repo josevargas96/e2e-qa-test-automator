@@ -164,25 +164,25 @@
             "id": "type_street",
             "action": "type",
             "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] textarea[name='street']",
-            "value": "123 Main St"
+            "value": "${STREET}"
         },
         {
             "id": "type_city",
             "action": "type",
             "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] input[name='city']",
-            "value": "New York"
+            "value": "${CITY}"
         },
         {
             "id": "type_state",
             "action": "type",
             "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] input[name='province']",
-            "value": "NY"
+            "value": "${STATE}"
         },
         {
             "id": "type_zip",
             "action": "type",
             "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] input[name='postalCode']",
-            "value": "10001"
+            "value": "${ZIP}"
         },
         {
             "id": "click_save_lead",

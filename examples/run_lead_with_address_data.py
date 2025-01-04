@@ -20,7 +20,7 @@ def main():
         config = {
             "headless": False,  # This will show the browser
             "slowMo": 1000,     # This will slow down operations
-            "output_dir": "{{file_path}}"  # Add your absolute path here
+            "output_dir": "{{local_file_path}}"  # Add your absolute path here
         }
         runner = TestRunner(config_path="config/config.json")
 
