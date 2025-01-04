@@ -150,6 +150,11 @@
             "action": "wait",
             "time": 1000,
             "description": "Wait for lead page to fully load"
+        },
+        {
+            "id": "capture_final_url",
+            "action": "get_url",
+            "save_to_file": "leads_urls.txt"
         }
     ]
 }

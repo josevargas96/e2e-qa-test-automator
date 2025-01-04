@@ -123,6 +123,18 @@ class AIWebTester:
         except Exception as e:
             self.logger.error(f"Error interacting with {element_type}: {e}")
     
+    def get_current_url(self) -> str:
+        """
+        Get the current page URL.
+        Returns:
+            str: The current page URL
+        """
+        try:
+            return self.page.url
+        except Exception as e:
+            self.logger.error(f"Error getting current URL: {e}")
+            raise
+    
     def close(self):
         """
         Clean up resources.

@@ -1,6 +1,7 @@
 {
     "headless": false,
     "screenshot_on_error": true,
+    "output_dir": "{{local_file_path}}",
     "wait_time": 2,
     "max_depth": 3,
     "allowed_domains": [],
