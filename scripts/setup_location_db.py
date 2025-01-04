@@ -221,7 +221,8 @@ def create_location_database():
             # Wyoming
             ('Cheyenne', 'WY', '82001'),
             ('Casper', 'WY', '82601'),
-            ('Laramie', 'WY', '82070')
+            ('Laramie', 'WY', '82070'),
+            ('Laramie', 'WY', '82071')
         ]
         
         # Insert sample data
