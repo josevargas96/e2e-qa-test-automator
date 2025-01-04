@@ -1,7 +1,7 @@
 from faker import Faker
 import sqlite3
 import os
-<<<<<<< HEAD
+import random
 
 class LeadDataGenerator:
     def __init__(self):
@@ -16,23 +16,6 @@ class LeadDataGenerator:
             )
     
     def _get_random_location(self):
-        """Get a random city, state, and ZIP code from the database."""
-=======
-import random
-
-class LeadDataGenerator:
-    def __init__(self, locale='en_US'):
-        self.fake = Faker(locale)
-        self.db_path = os.path.join('config', 'data', 'locations.db')
-    
-         # Verify database exists
-        if not os.path.exists(self.db_path):
-            raise FileNotFoundError(
-                "Database not found. Run setup_location_db.py first."
-        )
-
-    def _get_random_location(self):
->>>>>>> 114f78a (randomized addresses)
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -40,38 +23,18 @@ class LeadDataGenerator:
                 FROM locations 
                 ORDER BY RANDOM() 
                 LIMIT 1
-<<<<<<< HEAD
             """)
             return cursor.fetchone()
-    
-    def generate_lead_data(self):
-        """Generate random but valid lead data including address."""
-        # Get random real city/state/ZIP from database
-        city, state, zip_code = self._get_random_location()
-        
-=======
-        """)
-            return cursor.fetchone()    
     
     def generate_lead_data(self):
         """Generate a complete set of lead data."""
         # Get random real city/state/ZIP from database
         city, state, zip_code = self._get_random_location()
     
->>>>>>> 114f78a (randomized addresses)
         # Generate realistic street address using Faker
         street_number = self.fake.building_number()
         street_name = self.fake.street_name()
         street = f"{street_number} {street_name}"
-<<<<<<< HEAD
-        
-        return {
-            "STREET": street,
-            "CITY": city,
-            "STATE": state,
-            "ZIP": zip_code
-        }
-=======
     
         return {
             "FIRST_NAME": self.fake.first_name(),
@@ -84,7 +47,6 @@ class LeadDataGenerator:
             "ZIP": zip_code
     }
 
-    
     def generate_phone(self):
         """Generate a US phone number in the format (XXX) XXX-XXXX."""
         area_code = random.randint(200, 999)  # Valid area codes
@@ -92,11 +54,8 @@ class LeadDataGenerator:
         line = random.randint(1000, 9999)     # Valid line number
         return f"({area_code}) {prefix}-{line}"
     
-
-
 # Usage example:
 if __name__ == "__main__":
     generator = LeadDataGenerator()
     lead_data = generator.generate_lead_data()
     print(lead_data)
->>>>>>> 114f78a (randomized addresses)
