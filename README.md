@@ -51,9 +51,12 @@ e2e-qa-test-automator/
 │       └── lead_data_generator.py  # Test data generation
 ├── tests/               # Test cases
 ├── examples/            # Usage examples
-│   └── run_create_lead.py  # Lead creation example
+│   ├── run_create_lead.py           # Basic lead creation example
+│   └── run_lead_with_address_data.py # Extended lead example
 ├── config/              # Configuration
 │   ├── test_cases/     # JSON test definitions
+│   │   ├── create_lead.json             # Basic lead creation
+│   │   └── create_lead_with_address_data.json  # Extended lead flow
 │   └── config.yaml     # Global config
 └── requirements.txt     # Dependencies
 ```
@@ -143,12 +146,77 @@ runner.run_test(
 }
 ```
 
+### Example Usage with Extended Data
+
+```python
+from src.test_runner import TestRunner
+from src.utils.lead_data_generator import LeadDataGenerator
+
+def main():
+    # Initialize test runner
+    config = {
+        "headless": False,
+        "slowMo": 1000,
+        "output_dir": "/path/to/outputs"
+    }
+    runner = TestRunner(config_path="config/config.json")
+    data_gen = LeadDataGenerator()
+
+    # Generate lead data
+    lead_variables = data_gen.generate_lead_data()
+    
+    # Run extended lead creation test
+    runner.run_test(
+        "config/test_cases/create_lead_with_address_data.json",
+        variables=lead_variables,
+        close_after=True
+    )
+```
+
 ### Output Format
 The URL logging feature creates timestamped files with the following format:
 ```
 lead_urls_20250103_143022.txt:
 2025-01-03 14:30:22: John Smith - https://example.com/leads/12345
 ```
+
+## Test Case Organization
+
+### Naming Conventions
+- Use descriptive, action-based names for test case files
+- Include the primary functionality in the filename
+- Examples:
+  - `create_lead.json`
+  - `create_lead_with_address_data.json`
+
+### Test Case Structure
+1. **Base Test Cases**
+   - Focus on core functionality
+   - Minimal dependencies
+   - Example: `create_lead.json`
+
+2. **Extended Test Cases**
+   - Build upon base cases
+   - Add additional functionality
+   - Example: `create_lead_with_address_data.json`
+
+### Complexity Management Guidelines
+1. **Step Organization**
+   - Group related steps together
+   - Add descriptive comments
+   - Include appropriate wait times
+
+2. **Data Management**
+   - Use the LeadDataGenerator for consistent data
+   - Consider data dependencies
+   - Handle required vs. optional fields
+
+3. **Maintainability**
+   - Keep test cases focused
+   - Document complex selectors
+   - Use clear step IDs and descriptions
+
+
 
 ### Run with Custom Config
 ```bash
