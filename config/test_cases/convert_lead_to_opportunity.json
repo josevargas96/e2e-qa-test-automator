@@ -1,0 +1,204 @@
+{
+    "name": "Convert Lead to Opportunity",
+    "description": "Create a new USA lead and convert it to an opportunity",
+    "base_url": "https://betterhearing--staging.sandbox.lightning.force.com",
+    "steps": [
+        {
+            "id": "wait_for_page_load",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for page to fully load"
+        },
+        {
+            "id": "click_global_actions",
+            "action": "click",
+            "selector": "div[class='globalCreateContainer branding-global-create oneGlobalCreate'] a[role='button']",
+            "description": "Click global actions button"
+        },
+        {
+            "id": "wait_for_global_actions",
+            "action": "wait",
+            "time": 1000,
+            "description": "Wait for global actions to load"
+        },
+        {
+            "id": "click_new_lead",
+            "action": "click",
+            "selector": "a[title='New Lead USA']"
+        },
+        {
+            "id": "click_salutation",
+            "action": "click",
+            "selector": "a[role='combobox']"
+        },
+        {
+            "id": "select_salutation",
+            "action": "click",
+            "selector": "a[role='option'][title='Mr.']"
+        },
+        {
+            "id": "enter_first_name",
+            "action": "type",
+            "selector": "input.firstName.compoundBorderBottom",
+            "value": "${FIRST_NAME}"
+        },
+        {
+            "id": "enter_last_name",
+            "action": "type",
+            "selector": "input.lastName.compoundBLRadius",
+            "value": "${LAST_NAME}"
+        },
+        {
+            "id": "enter_email",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Email'] input[inputmode='email']",
+            "value": "${EMAIL}"
+        },
+        {
+            "id": "enter_phone",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Phone'] input[type='tel']",
+            "value": "${PHONE}"
+        },
+        {
+            "id": "enter_mobile_phone",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.MobilePhone'] input[type='tel']",
+            "value": "${PHONE}"
+        },
+        {
+            "id": "click_solution_dropdown",
+            "action": "click", 
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Solution__c'] a[role='combobox']"
+        },
+        {
+            "id": "wait_for_dropdown",
+            "action": "wait",
+            "time": 1000
+        },
+        {
+            "id": "select_solution",
+            "action": "click",
+            "selector": "a[role='option'][title='Hear Today']"
+        },
+        {
+            "id": "click_campaign_dropdown",
+            "action": "click", 
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Delivery_Model__c'] a[role='combobox']"
+        },
+        {
+            "id": "wait_for_campaign_dropdown",
+            "action": "wait",
+            "time": 1000
+        },
+        {
+            "id": "select_solution",
+            "action": "click",
+            "selector": "a[role='option'][title='Teleaudiology']"
+        },
+        {
+            "id": "click_save",
+            "action": "click",
+            "selector": "div[class='bottomBarRight slds-col--bump-left'] span[class=' label bBody']"
+        },
+        {
+            "id": "wait_after_save",
+            "action": "wait",
+            "time": 10000
+        },
+        {
+            "id": "navigate_to_leads",
+            "action": "navigate",
+            "url": "https://betterhearing--staging.sandbox.lightning.force.com/lightning/o/Lead/list",
+            "optional": true
+        },
+        {
+            "id": "wait_for_leads_page_load",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for page to fully load"
+        },
+        {
+            "id": "click_first_lead",
+            "action": "click",
+            "selector": "a[data-refid='recordId'][title='${FIRST_NAME} ${LAST_NAME}']"
+        },
+        {
+            "id": "wait_for_lead_to_load",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for lead page to fully load"
+        },
+        {
+            "id": "start_editing",
+            "action": "click",
+            "selector": "button[title='Edit Experience']"
+        },
+        {
+            "id": "click_experience_dropdown",
+            "action": "click",
+            "selector": "div[class='record-layout-container'] button[role='combobox'][aria-label='Experience']"
+        },
+        {
+            "id": "select_experience",
+            "action": "click",
+            "selector": "lightning-base-combobox-item[role='option'] [title='First-time user']"
+        },
+        {
+            "id": "click_preferred_hearing_aid_color_dropdown",
+            "action": "click",
+            "selector": "div[class='record-layout-container'] button[role='combobox'][aria-label='Preferred hearing aid color']"
+        },
+        {
+            "id": "select_preferred_hearing_aid_color",
+            "action": "click",
+            "selector": "lightning-base-combobox-item[role='option'] [title='Beige']"
+        },
+        {
+            "id": "type_date_of_birth",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Date_of_birth__c'] input[name='Date_of_birth__c']",
+            "value": "01/01/1990"
+        },
+        {
+            "id": "type_street",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] textarea[name='street']",
+            "value": "${STREET}"
+        },
+        {
+            "id": "type_city",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] input[name='city']",
+            "value": "${CITY}"
+        },
+        {
+            "id": "type_state",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] input[name='province']",
+            "value": "${STATE}"
+        },
+        {
+            "id": "type_zip",
+            "action": "type",
+            "selector": "div[data-target-selection-name='sfdc:RecordField.Lead.Address'] input[name='postalCode']",
+            "value": "${ZIP}"
+        },
+        {
+            "id": "click_save_lead",
+            "action": "click",
+            "selector": "button[name='SaveEdit']"
+        },
+        {
+            "id": "wait_for_lead_to_save",
+            "action": "wait",
+            "time": 5000,
+            "description": "Wait for lead to save"
+        },
+        {
+            "id": "capture_final_url",
+            "action": "get_url",
+            "save_to_file": "leads_with_address_urls.txt"
+        }
+    ]
+}
